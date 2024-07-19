@@ -12,21 +12,17 @@ window.addEventListener('load', () => {
     };
 
     const colapse = () => {
-        const expandedSquare = document.querySelector('.square.expanded');
-        if (!expandedSquare) return;
+        const square = document.querySelector('.square.expanded');
+        if (square)
+            square.classList.toggle('expanded');
 
-        expandedSquare.classList.toggle('expanded');
+        const date = document.querySelector('.date.expanded');
+        if (date)
+            date.classList.toggle('expanded');
 
-        const parent = expandedSquare.closest('.square-container');
-        if (!parent) return;
-
-        const expandedDate = document.querySelector('.date.expanded');
-        if (expandedDate)
-            expandedDate.classList.toggle('expanded');
-
-        const visibleText = document.querySelector('.text.visible');
-        if (visibleText)
-            visibleText.classList.toggle('visible');
+        const text = document.querySelector('.text.visible');
+        if (text)
+            text.classList.toggle('visible');
     };
 
     const openNext = (next) => {
@@ -36,44 +32,50 @@ window.addEventListener('load', () => {
         if (!nextcontainer) return;
 
         const square = nextcontainer.querySelector('.square');
-
         if (square)
             square.classList.toggle('expanded');
 
         const date = nextcontainer.querySelector('.date');
-
         if (date)
             date.classList.toggle('expanded');
 
         const text = nextcontainer.querySelector('.text');
-
         if (text)
             text.classList.toggle('visible');
     };
 
-    const fireOnClickEvent = (event) => {
+    const fireOnClickEvent = (element) => {
         colapse();
 
-        const selectedSquare = event.target;
-        selectedSquare.classList.toggle('expanded');
-
-        const parent = selectedSquare.closest('.square-container');
+        const parent = element.closest('.square-container');
 
         if (!parent) return;
 
-        const dateElement = parent.querySelector('.date');
-        dateElement.classList.toggle('expanded');
+        const square = parent.querySelector('.square');
+        if (square)
+            square.classList.toggle('expanded');
 
-        const textElement = parent.querySelector('.text-container .text');
-        textElement.classList.toggle('visible');
+        const date = parent.querySelector('.date');
+        if (date)
+            date.classList.toggle('expanded');
 
+        const text = parent.querySelector('.text-container .text');
+        if (text)
+            text.classList.toggle('visible');
     };
 
     const squares = document.querySelectorAll('.square');
 
     squares.forEach(square => {
         square.addEventListener('click', (event) => {
-            fireOnClickEvent(event);
+            fireOnClickEvent(event.target);
+        });
+    });
+
+    const dates = document.querySelectorAll('.date');
+    dates.forEach(date => {
+        date.addEventListener('click', (event) => {
+            fireOnClickEvent(event.target);
         });
     });
 
