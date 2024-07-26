@@ -44,7 +44,7 @@ window.addEventListener('load', () => {
             text.classList.toggle('visible');
     };
 
-    const fireOnClickEvent = (element) => {
+    const handleOnClickEvent = (element) => {
         colapse();
 
         const parent = element.closest('.square-container');
@@ -68,14 +68,14 @@ window.addEventListener('load', () => {
 
     squares.forEach(square => {
         square.addEventListener('click', (event) => {
-            fireOnClickEvent(event.target);
+            handleOnClickEvent(event.target);
         });
     });
 
     const dates = document.querySelectorAll('.date');
     dates.forEach(date => {
         date.addEventListener('click', (event) => {
-            fireOnClickEvent(event.target);
+            handleOnClickEvent(event.target);
         });
     });
 
@@ -107,5 +107,7 @@ window.addEventListener('load', () => {
 
     const debouncedHandleWheelEvent = debounce(handleWheelEvent, 150);
     const scrollableElement = document.querySelector('#container');
-    scrollableElement.addEventListener('wheel', debouncedHandleWheelEvent);
+
+    if(scrollableElement)
+        scrollableElement.addEventListener('wheel', debouncedHandleWheelEvent);
 });
