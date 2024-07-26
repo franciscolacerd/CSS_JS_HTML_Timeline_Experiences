@@ -70,10 +70,6 @@ footer {
                 height: 25px;
             }
 
-            .square:hover {
-                cursor: pointer;
-            }
-
             .date {
                 font-size: large;
                 font-weight: bold;
@@ -81,7 +77,8 @@ footer {
                 overflow: hidden;
             }
 
-            .date:hover {
+            .date:hover,
+            .square:hover {
                 cursor: pointer;
             }
 
