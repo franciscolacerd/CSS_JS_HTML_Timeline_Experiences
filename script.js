@@ -1,96 +1,74 @@
 window.addEventListener('load', () => {
     let currentIndex = 0;
     let maxIndex = 0;
-    const getCurrentIndex = () => {
-        const containers = document.querySelectorAll('.square-container');
-        maxIndex = containers.length - 1
 
+    const clss = {
+        square: '.square',
+        date: '.date',
+        text: '.text',
+        squareContainer: '.square-container',
+        squareExpanded: '.square.expanded',
+        dateExpanded: '.date.expanded',
+        textExpanded: '.text.expanded',
+    };
+
+    const ids = {
+        container: '#container'
+    };
+
+    const getCurrentIndex = () => {
+        const containers = document.querySelectorAll(clss.squareContainer);
+        maxIndex = containers.length - 1
         for (let index = 0; index < containers.length; index++) {
-            if (containers[index].querySelector('.square.expanded'))
+            if (containers[index].querySelector(clss.squareExpanded))
                 currentIndex = index
         }
+        // Array.from(document.querySelectorAll(clss.squareContainer))?.find((el, index) => {
+        //     if (el.querySelector(clss.squareExpanded))
+        //         currentIndex = index;
+        // });
     };
 
-    const colapse = () => {
-        const square = document.querySelector('.square.expanded');
-        if (square)
-            square.classList.toggle('expanded');
+    const toggle = (els) => Object.entries(els).map(([key, el]) => el.toggle('expanded'));
 
-        const date = document.querySelector('.date.expanded');
-        if (date)
-            date.classList.toggle('expanded');
+    const handleToggle = (container, isExpanded) => {
+        if (!container) return;
 
-        const text = document.querySelector('.text.visible');
-        if (text)
-            text.classList.toggle('visible');
+        const els = {
+            square: container.querySelector(isExpanded ? clss.squareExpanded : clss.square)?.classList,
+            date: container.querySelector(isExpanded ? clss.dateExpanded : clss.date)?.classList,
+            text: container.querySelector(isExpanded ? clss.textExpanded : clss.text)?.classList
+        };
+
+        toggle(els);
     };
 
-    const openNext = (next) => {
-        const containers = document.querySelectorAll('.square-container');
-        const nextcontainer = containers[next];
+    const colapse = () => handleToggle(document, true);
 
-        if (!nextcontainer) return;
-
-        const square = nextcontainer.querySelector('.square');
-        if (square)
-            square.classList.toggle('expanded');
-
-        const date = nextcontainer.querySelector('.date');
-        if (date)
-            date.classList.toggle('expanded');
-
-        const text = nextcontainer.querySelector('.text');
-        if (text)
-            text.classList.toggle('visible');
-    };
-
-    const handleOnClickEvent = (element) => {
+    const expand = (container) => {
         colapse();
-
-        const parent = element.closest('.square-container');
-
-        if (!parent) return;
-
-        const square = parent.querySelector('.square');
-        if (square)
-            square.classList.toggle('expanded');
-
-        const date = parent.querySelector('.date');
-        if (date)
-            date.classList.toggle('expanded');
-
-        const text = parent.querySelector('.text-container .text');
-        if (text)
-            text.classList.toggle('visible');
+        handleToggle(container, false);
     };
 
-    const squares = document.querySelectorAll('.square');
+    const openNext = (next) => expand(document.querySelectorAll(clss.squareContainer)[next]);
 
-    squares.forEach(square => {
-        square.addEventListener('click', (event) => {
-            handleOnClickEvent(event.target);
-        });
-    });
+    const handleOnClickEvent = (element) => expand(element.closest(clss.squareContainer));
 
-    const dates = document.querySelectorAll('.date');
-    dates.forEach(date => {
-        date.addEventListener('click', (event) => {
-            handleOnClickEvent(event.target);
-        });
-    });
+    const bindEventToElements = (els) => els.length &&
+        Array.from(els).map(x => x.addEventListener('click', (event) => handleOnClickEvent(event.target)));
+
+    bindEventToElements(document.querySelectorAll(clss.square));
+
+    bindEventToElements(document.querySelectorAll(clss.date));
 
     const handleWheelEvent = (event) => {
         getCurrentIndex();
 
-        if (currentIndex != 0 && event.deltaY == -100) {
-            colapse();
+        if (currentIndex != 0 && event.deltaY == -100)
             openNext(currentIndex - 1);
-        }
 
-        if (currentIndex != maxIndex && event.deltaY == 100) {
-            colapse();
+        if (currentIndex != maxIndex && event.deltaY == 100)
             openNext(currentIndex + 1);
-        }
     }
 
     const debounce = (func, delay) => {
@@ -106,8 +84,8 @@ window.addEventListener('load', () => {
     }
 
     const debouncedHandleWheelEvent = debounce(handleWheelEvent, 150);
-    const scrollableElement = document.querySelector('#container');
+    const scrollableElement = document.querySelector(ids.container);
 
-    if(scrollableElement)
+    if (scrollableElement)
         scrollableElement.addEventListener('wheel', debouncedHandleWheelEvent);
 });

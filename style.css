@@ -82,6 +82,10 @@ footer {
                 overflow: hidden;
             }
 
+            .date:hover {
+                cursor: pointer;
+            }
+
             .date.expanded {
                 font-size: x-large;
             }
@@ -106,7 +110,7 @@ footer {
                     width: 400px;
                 }
 
-                .text.visible {
+                .text.expanded {
                     opacity: 1;
                     height: 200px;
                     visibility: visible;
