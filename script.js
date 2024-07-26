@@ -1,6 +1,5 @@
 window.addEventListener('load', () => {
-    let currentIndex = 0;
-    let maxIndex = 0;
+    let currentIndex, maxIndex = 0;
 
     const clss = {
         square: '.square',
@@ -10,26 +9,27 @@ window.addEventListener('load', () => {
         squareExpanded: '.square.expanded',
         dateExpanded: '.date.expanded',
         textExpanded: '.text.expanded',
+        expanded: 'expanded'
     };
 
     const ids = {
         container: '#container'
     };
 
-    const getCurrentIndex = () => {
-        const containers = document.querySelectorAll(clss.squareContainer);
-        maxIndex = containers.length - 1
-        for (let index = 0; index < containers.length; index++) {
-            if (containers[index].querySelector(clss.squareExpanded))
-                currentIndex = index
-        }
-        // Array.from(document.querySelectorAll(clss.squareContainer))?.find((el, index) => {
-        //     if (el.querySelector(clss.squareExpanded))
-        //         currentIndex = index;
-        // });
+    const events = {
+        click: 'click',
+        wheel: 'wheel'
     };
 
-    const toggle = (els) => Object.entries(els).map(([key, el]) => el.toggle('expanded'));
+    const getCurrentIndex = () => {
+        Array.from(document.querySelectorAll(clss.squareContainer))?.map((el, index) => {
+            if (el.querySelector(clss.squareExpanded))
+                currentIndex = index;
+            maxIndex = index;
+        });
+    };
+
+    const toggle = els => Object.entries(els).map(([key, el]) => el.toggle(clss.expanded));
 
     const handleToggle = (container, isExpanded) => {
         if (!container) return;
@@ -45,23 +45,23 @@ window.addEventListener('load', () => {
 
     const colapse = () => handleToggle(document, true);
 
-    const expand = (container) => {
+    const expand = container => {
         colapse();
         handleToggle(container, false);
     };
 
-    const openNext = (next) => expand(document.querySelectorAll(clss.squareContainer)[next]);
+    const openNext = next => expand(document.querySelectorAll(clss.squareContainer)[next]);
 
-    const handleOnClickEvent = (element) => expand(element.closest(clss.squareContainer));
+    const handleOnClickEvent = element => expand(element.closest(clss.squareContainer));
 
-    const bindEventToElements = (els) => els.length &&
-        Array.from(els).map(x => x.addEventListener('click', (event) => handleOnClickEvent(event.target)));
+    const bindEventToElements = els => els.length &&
+        Array.from(els).map(x => x.addEventListener(events.click, (event) => handleOnClickEvent(event.target)));
 
     bindEventToElements(document.querySelectorAll(clss.square));
 
     bindEventToElements(document.querySelectorAll(clss.date));
 
-    const handleWheelEvent = (event) => {
+    const handleWheelEvent = event => {
         getCurrentIndex();
 
         if (currentIndex != 0 && event.deltaY == -100)
@@ -87,5 +87,5 @@ window.addEventListener('load', () => {
     const scrollableElement = document.querySelector(ids.container);
 
     if (scrollableElement)
-        scrollableElement.addEventListener('wheel', debouncedHandleWheelEvent);
+        scrollableElement.addEventListener(events.wheel, debouncedHandleWheelEvent);
 });

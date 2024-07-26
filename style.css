@@ -44,7 +44,6 @@ footer {
     display: flex;
     background: white;
     justify-content: center;
-    overflow-y: scroll;
 
     #squares-container {
         display: flex;
