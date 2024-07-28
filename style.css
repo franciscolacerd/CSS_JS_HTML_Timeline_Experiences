@@ -48,6 +48,7 @@ footer {
     #squares-container {
         display: flex;
         flex-direction: column;
+        margin: 0 50px;
 
         .square-container {
             display: flex;
@@ -71,6 +72,7 @@ footer {
             }
 
             .date {
+                min-width: 150px;
                 font-size: large;
                 font-weight: bold;
                 transition: font-size 1s ease;
@@ -83,7 +85,7 @@ footer {
             }
 
             .date.expanded {
-                font-size: x-large;
+                font-size: xx-large;
             }
 
             .text-container {
